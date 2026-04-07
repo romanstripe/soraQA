@@ -38,41 +38,73 @@ export default defineConfig({
   },
 
   /* Configure projects for major browsers */
+  // projects: [
+  //   {
+  //     name: "chromium",
+  //     use: { ...devices["Desktop Chrome"] },
+  //   },
+
+  //   {
+  //     name: 'firefox',
+  //     use: { ...devices['Desktop Firefox'] },
+  //   },
+
+  //   {
+  //     name: 'webkit',
+  //     use: { ...devices['Desktop Safari'] },
+  //   },
+
+  //   /* Test against mobile viewports. */
+  //   {
+  //     name: 'Mobile Chrome',
+  //     use: { ...devices['Pixel 5'] },
+  //   },
+  //   {
+  //     name: 'Mobile Safari',
+  //     use: { ...devices['iPhone 12'] },
+  //   },
+
+  //   /* Test against branded browsers. */
+  //   {
+  //     name: 'Microsoft Edge',
+  //     use: { ...devices['Desktop Edge'], channel: 'msedge' },
+  //   },
+  //   {
+  //     name: 'Google Chrome',
+  //     use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+  //   },
+  // ],
+
   projects: [
+    //  [SETUP] 로그인 상태를 파일로 저장하는 프로젝트
     {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      name: "setup",
+      testMatch: /auth\.setup\.ts/, // auth.setup.ts 파일만 실행
     },
 
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
+    //[AUTH] 로그인 기능 테스트시 setup 안씀
+    {
+      name: "auth-tests",
+      testMatch: /auth\.spec\.ts/, // sora.auth.spec.ts 또는 auth.spec.ts
+      use: {
+        ...devices["Desktop Chrome"],
+        // 💡 중요: 여기선 저장된 로그인 정보를 절대 사용하지 않음! 쌩 브라우저로 실행!
+        storageState: { cookies: [], origins: [] },
+      },
+    },
 
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
-    // },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+    // [SERVICE] 로그인된 상태로 영상 기능 테스트
+    {
+      name: "service-tests",
+      testMatch: /service\.spec\.ts/, // video.spec.ts 또는 sora.video.spec.ts
+      use: {
+        ...devices["Desktop Chrome"],
+        // 셋업에서 만든 로그인 정보를 가져와서 바로 로그인된 채로 시작
+        storageState: "playwright/.auth/user.json",
+      },
+      //셋업 프로젝트가 성공해야만 이 프로젝트가 돌아감
+      dependencies: ["setup"],
+    },
   ],
 
   /* Run your local dev server before starting the tests */
