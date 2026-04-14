@@ -1,15 +1,4 @@
-// import { test, expect } from '@playwright/test';
-//폴더 - 공유 기능
-
-// test('test', async ({ page }) => {
-//   await page.locator('.pt-4 > .group').click();
-//   await page.locator('#radix-_r_u_').click();
-//   await page.getByRole('menuitem', { name: '공유 제거' }).click();
-//   await page.getByRole('button', { name: '확인' }).click();
-//   await page.getByRole('button', { name: '확인' }).click();
-// });
-
-// models/ServiceFolder.ts
+// models/FolderPage.ts
 
 import "dotenv/config";
 import { type Locator, type Page } from "@playwright/test";

@@ -74,3 +74,16 @@
 //   await page.getByRole("button", { name: "확인" }).click();
 //   await page.getByRole("button", { name: "링크 공유 관리 (자막 등)" }).click();
 // });
+
+// models/FilePage.ts
+
+import "dotenv/config";
+import { type Locator, type Page } from "@playwright/test";
+
+export class FilePage {
+  readonly page: Page;
+
+  constructor(page: Page) {
+    this.page = page;
+  }
+}
