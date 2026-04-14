@@ -5,7 +5,7 @@ import { LandingPage } from "../models/LandingPage";
 import { LoginPage } from "../models/LoginPage";
 import { FolderPage } from "../models/FolderPage";
 
-test.describe("폴더 변경 테스트", () => {
+test.describe("Test for editing folders", () => {
   // await page.goto(`${process.env.BASE_URL}/service`); //세션 에러 개선후
   // await expect(page).toHaveURL(/.*service/);
 
@@ -27,13 +27,32 @@ test.describe("폴더 변경 테스트", () => {
 
   test("Folder Delete Test", async ({ page }) => {
     const folderPage = new FolderPage(page);
+    await folderPage.makeFolder("New2 Folder");
     await folderPage.deleteFolder("New2 Folder");
     await expect(page).toHaveURL(/.*service/);
   });
 
   test("Folder Edit Test", async ({ page }) => {
     const folderPage = new FolderPage(page);
+    await folderPage.makeFolder("New2 Folder");
     await folderPage.editFolder("New2 Folder", "Edited Folder");
+    await expect(page).toHaveURL(/.*service/);
+  });
+
+  test("Folder Share Test", async ({ page }) => {
+    const folderPage = new FolderPage(page);
+    await folderPage.shareFolder("Share Folder", process.env.KAKAO_ID!);
+    await folderPage.shareFolder(
+      "Share2 Folder",
+      process.env.KAKAO_ID!,
+      "편집 가능",
+    );
+    await expect(page).toHaveURL(/.*service/);
+  });
+
+  test("Folder Unshare Test", async ({ page }) => {
+    const folderPage = new FolderPage(page);
+    await folderPage.unshareFolder("Share2 Folder");
     await expect(page).toHaveURL(/.*service/);
   });
 });

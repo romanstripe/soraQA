@@ -1,79 +1,12 @@
-// import { test, expect } from "@playwright/test";
-
-// test("test", async ({ page }) => {
-//   await page //파일 관련 - 전사 등등
+// import { test, expect } from '@playwright/test';
 //폴더 - 공유 기능
-//파일 중... 휴지통 - 복구, 완전 삭제 기능
-//사용자 - 계정 정보, 공유 관리, 링크 공유 관리 등등
 
-//     .locator("div")
-//     .filter({ hasText: /^삭제전용$/ })
-//     .nth(1)
-//     .click();
-//   await page.getByRole("button", { name: "새로 전사하기" }).click();
-//   await page
-//     .getByRole("textbox", { name: "동영상 웹주소를 입력해주세요" })
-//     .click();
-//   await page
-//     .getByRole("textbox", { name: "동영상 웹주소를 입력해주세요" })
-//     .fill("https://youtu.be/FqGaN7E3WZg?si=i_SB8CPtvtzoQAiV");
-//   await page.getByRole("button", { name: "확인" }).click();
-//   await page.getByRole("button", { name: "전사 하기" }).click();
-//   await page.getByRole("button", { name: "Toggle theme" }).click();
-//   await page.getByRole("button", { name: "파일 전체 보기" }).click();
-//   await page
-//     .locator("div")
-//     .filter({ hasText: /^삭제전용$/ })
-//     .first()
-//     .click();
-
-//   await page.locator("#radix-_r_10_").click();
-//   await page.getByRole("menuitem", { name: "공유" }).click();
-//   await page
-//     .getByRole("textbox", { name: "공유할 사용자 이메일 입력" })
-//     .click();
-//   await page
-//     .getByRole("textbox", { name: "공유할 사용자 이메일 입력" })
-//     .fill("ppresi26@naver.com");
-//   await page.getByRole("button").filter({ hasText: /^$/ }).click();
-//   await page
-//     .getByRole("button", { name: "편집 가능 이름 변경 및 자막 편집 가능" })
-//     .click();
-//   await page.getByRole("button", { name: "공유" }).click();
-//   await page.getByRole("button", { name: "확인" }).click();
-//   await page.locator("#radix-_r_10_").click();
-//   await page.getByRole("menuitem", { name: "편집" }).click();
-
-//   await page.getByRole("button", { name: "휴지통" }).click();
-//   await page.getByRole("button", { name: "전체 복구" }).click();
-//   await page.getByRole("button", { name: "확인" }).click();
-//   await page.getByRole("button", { name: "확인" }).click();
-//   await page.getByRole("button", { name: "파일 전체 보기" }).click();
-//   await page.locator("#radix-_r_30_").click();
-//   await page.getByText("삭제").click();
-//   await page.getByRole("button", { name: "확인" }).click();
-//   await page.getByRole("button", { name: "확인" }).click();
-//   await page.getByRole("button", { name: "휴지통" }).click();
-//   await page.getByRole("button", { name: "휴지통 비우기" }).click();
-//   await page.getByRole("button", { name: "확인" }).click();
-//   await page.getByRole("button", { name: "확인" }).click();
-//   await page.getByRole("button", { name: "KAKAO_ID }).click();
-//   await page.getByRole("menuitem", { name: "계정 정보" }).click();
-//   page.once("dialog", (dialog) => {
-//     console.log(`Dialog message: ${dialog.message()}`);
-//     dialog.dismiss().catch(() => {});
-//   });
-//   await page.getByRole("button", { name: "비밀번호 변경" }).click();
-//   await page.getByRole("textbox", { name: "현재 비밀번호" }).click();
-//   await page.getByRole("button", { name: "KAKAO_ID" }).click();
-//   await page.getByRole("menuitem", { name: "공유 관리" }).click();
-//   await page.locator("#radix-_r_46_").click();
-//   await page.getByText("읽기 전용").click();
-//   await page.getByRole("button", { name: "확인" }).click();
-//   await page.getByRole("cell").filter({ hasText: /^$/ }).nth(1).click();
-//   await page.getByRole("button", { name: "확인" }).click();
-//   await page.getByRole("button", { name: "확인" }).click();
-//   await page.getByRole("button", { name: "링크 공유 관리 (자막 등)" }).click();
+// test('test', async ({ page }) => {
+//   await page.locator('.pt-4 > .group').click();
+//   await page.locator('#radix-_r_u_').click();
+//   await page.getByRole('menuitem', { name: '공유 제거' }).click();
+//   await page.getByRole('button', { name: '확인' }).click();
+//   await page.getByRole('button', { name: '확인' }).click();
 // });
 
 // models/ServiceFolder.ts
@@ -86,9 +19,17 @@ export class FolderPage {
   readonly folderInput: Locator;
   readonly folderBtn: Locator;
   readonly createFolderBtn: Locator;
-  readonly deleteBtn: Locator;
-  readonly okayBtn: Locator;
+
+  readonly shareBtn: Locator;
   readonly editBtn: Locator;
+  readonly deleteBtn: Locator;
+
+  readonly shareEmailInput: Locator;
+  readonly removeShareBtn: Locator;
+  readonly shareSubmitBtn: Locator;
+  readonly addEmailBtn: Locator;
+
+  readonly okayBtn: Locator;
   readonly saveBtn: Locator;
 
   constructor(page: Page) {
@@ -99,10 +40,52 @@ export class FolderPage {
       name: "생성",
       exact: true,
     });
-    this.deleteBtn = page.getByRole("menuitem", { name: "삭제" });
+
+    this.shareBtn = page.getByRole("menuitem", { name: "공유" });
     this.editBtn = page.getByRole("menuitem", { name: "편집" });
+    this.deleteBtn = page.getByRole("menuitem", { name: "삭제" });
+
     this.okayBtn = page.getByRole("button", { name: "확인", exact: true });
     this.saveBtn = page.getByRole("button", { name: "저장", exact: true });
+
+    this.shareSubmitBtn = page.getByRole("button", {
+      name: "공유",
+      exact: true,
+    });
+    this.shareEmailInput = page.getByRole("textbox", {
+      name: "공유할 사용자 이메일 입력",
+    });
+
+    this.addEmailBtn = page.getByRole("button").filter({ hasText: /^$/ });
+    this.removeShareBtn = page.getByRole("menuitem", { name: "공유 제거" });
+  }
+
+  // 점 세 개 여는 함수 - 공유, 편집, 삭제, 공유제거 - boolean으로 구분
+  private async openFolderMenu(folderName: string, isShared: boolean = false) {
+    let root: Locator;
+
+    if (isShared) {
+      // 비공유 영역에서 찾을 때
+      root = this.page
+        .locator("div")
+        .filter({ hasText: /^공유 폴더$/ }) // 제목 찾고
+        .locator("..") // 부모로 올라가서 목록 전체 확보
+        .first();
+    } else {
+      root = this.page
+        .locator("div")
+        .filter({ hasText: /^폴더 목록$/ }) // 제목 찾고
+        .locator("..") // 부모로 올라가서 목록 전체 확보
+        .first();
+    }
+
+    // 최종적으로 타겟 폴더의 메뉴 버튼 클릭
+    const targetFolder = root
+      .locator("div")
+      .filter({ hasText: new RegExp(`^${folderName}$`) })
+      .first();
+
+    await targetFolder.locator('[id^="radix-"]').first().click();
   }
 
   async makeFolder(folderName: string) {
@@ -112,37 +95,39 @@ export class FolderPage {
   }
 
   async deleteFolder(folderName: string) {
-    // 폴더 이름으로 영역 확보
-    const folderLocator = this.page
-      .locator("div")
-      .filter({
-        hasText: new RegExp(`^${folderName}$`),
-      })
-      .first();
-
-    // 그 영역 '안에' 들어있는 radix 버튼 클릭
-    // .first()를 붙이는 이유는 레이아웃상 아이콘이 여러 개일 수 있기 때문
-    await folderLocator.locator('[id^="radix-"]').first().click();
+    await this.openFolderMenu(folderName);
     await this.deleteBtn.click();
     await this.okayBtn.click();
     await this.okayBtn.click();
   }
 
   async editFolder(oldFolderName: string, newFolderName: string) {
-    // 폴더 이름으로 영역 확보
-    const folderLocator = this.page
-      .locator("div")
-      .filter({
-        hasText: new RegExp(`^${oldFolderName}$`),
-      })
-      .first();
-
-    // 그 영역 '안에' 들어있는 radix 버튼 클릭
-    // .first()를 붙이는 이유는 레이아웃상 아이콘이 여러 개일 수 있기 때문
-    await folderLocator.locator('[id^="radix-"]').first().click();
+    await this.openFolderMenu(oldFolderName);
     await this.editBtn.click();
     await this.folderInput.fill(newFolderName);
     await this.saveBtn.click();
+    await this.okayBtn.click();
+  }
+
+  async shareFolder(
+    folderName: string,
+    email: string,
+    authType: "읽기 전용" | "편집 가능" = "읽기 전용", // 기본값 설정
+  ) {
+    await this.openFolderMenu(folderName);
+    await this.shareBtn.click();
+    await this.shareEmailInput.fill(email);
+    await this.addEmailBtn.click();
+    //await this.page.keyboard.press("Enter"); //엔터로도 넘어감
+    await this.page.getByRole("button", { name: new RegExp(authType) }).click();
+    await this.shareSubmitBtn.click();
+    await this.okayBtn.click();
+  }
+
+  async unshareFolder(folderName: string) {
+    await this.openFolderMenu(folderName, true); // 공유됐으므로 true 전달
+    await this.removeShareBtn.click();
+    await this.okayBtn.click();
     await this.okayBtn.click();
   }
 }
