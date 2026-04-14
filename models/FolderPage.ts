@@ -123,7 +123,6 @@ export class FolderPage {
     // 그 영역 '안에' 들어있는 radix 버튼 클릭
     // .first()를 붙이는 이유는 레이아웃상 아이콘이 여러 개일 수 있기 때문
     await folderLocator.locator('[id^="radix-"]').first().click();
-    await folderLocator.click();
     await this.deleteBtn.click();
     await this.okayBtn.click();
     await this.okayBtn.click();
@@ -141,7 +140,6 @@ export class FolderPage {
     // 그 영역 '안에' 들어있는 radix 버튼 클릭
     // .first()를 붙이는 이유는 레이아웃상 아이콘이 여러 개일 수 있기 때문
     await folderLocator.locator('[id^="radix-"]').first().click();
-    await folderLocator.click();
     await this.editBtn.click();
     await this.folderInput.fill(newFolderName);
     await this.saveBtn.click();
