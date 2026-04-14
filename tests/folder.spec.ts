@@ -1,4 +1,4 @@
-// tests/service.spec.ts
+// tests/folder.spec.ts
 
 import { test, expect } from "@playwright/test";
 import { LandingPage } from "../models/LandingPage";
