@@ -5,7 +5,7 @@ import { LandingPage } from "../models/LandingPage";
 import { LoginPage } from "../models/LoginPage";
 import { FolderPage } from "../models/FolderPage";
 
-test.describe("Test for editing folders", () => {
+test.describe("Test for editing Folders", () => {
   // await page.goto(`${process.env.BASE_URL}/service`); //세션 에러 개선후
   // await expect(page).toHaveURL(/.*service/);
 
