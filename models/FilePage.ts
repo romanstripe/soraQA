@@ -4,20 +4,7 @@
 //사용자 - 계정 정보, 공유 관리, 링크 공유 관리  + 언어, 테마
 
 //파일페이지 - 파일관련
-// test("test", async ({ page }) => {
-//     .locator("div")
-//     .filter({ hasText: /^삭제전용$/ })
-//     .nth(1)
-//     .click();
-//   await page.getByRole("button", { name: "새로 전사하기" }).click();
-//   await page
-//     .getByRole("textbox", { name: "동영상 웹주소를 입력해주세요" })
-//     .click();
-//   await page
-//     .getByRole("textbox", { name: "동영상 웹주소를 입력해주세요" })
-//     .fill("https://youtu.be/FqGaN7E3WZg?si=i_SB8CPtvtzoQAiV");
-//   await page.getByRole("button", { name: "확인" }).click();
-//   await page.getByRole("button", { name: "전사 하기" }).click();
+
 //   await page.getByRole("button", { name: "Toggle theme" }).click();
 //   await page.getByRole("button", { name: "파일 전체 보기" }).click();
 //   await page
@@ -25,23 +12,6 @@
 //     .filter({ hasText: /^삭제전용$/ })
 //     .first()
 //     .click();
-
-//   await page.locator("#radix-_r_10_").click();
-//   await page.getByRole("menuitem", { name: "공유" }).click();
-//   await page
-//     .getByRole("textbox", { name: "공유할 사용자 이메일 입력" })
-//     .click();
-//   await page
-//     .getByRole("textbox", { name: "공유할 사용자 이메일 입력" })
-//     .fill("ppresi26@naver.com");
-//   await page.getByRole("button").filter({ hasText: /^$/ }).click();
-//   await page
-//     .getByRole("button", { name: "편집 가능 이름 변경 및 자막 편집 가능" })
-//     .click();
-//   await page.getByRole("button", { name: "공유" }).click();
-//   await page.getByRole("button", { name: "확인" }).click();
-//   await page.locator("#radix-_r_10_").click();
-//   await page.getByRole("menuitem", { name: "편집" }).click();
 
 //   await page.getByRole("button", { name: "휴지통" }).click();
 //   await page.getByRole("button", { name: "전체 복구" }).click();
@@ -82,8 +52,99 @@ import { type Locator, type Page } from "@playwright/test";
 
 export class FilePage {
   readonly page: Page;
+  readonly transBtn: Locator;
+  readonly transSubBtn: Locator;
+  readonly addressInput: Locator;
+  readonly okayBtn: Locator;
+
+  readonly shareBtn: Locator;
+  readonly downloadBtn: Locator;
+  readonly editBtn: Locator;
+  readonly deleteBtn: Locator;
+
+  readonly shareEmailInput: Locator;
+  readonly shareSubmitBtn: Locator;
+  readonly addEmailBtn: Locator;
+  readonly saveBtn: Locator;
+  readonly fileNameInput: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.transBtn = page.getByRole("button", { name: "전사" });
+    this.transSubBtn = page.getByRole("button", {
+      name: "전사 하기",
+      exact: true,
+    });
+    this.addressInput = page.getByRole("textbox", {
+      name: "동영상 웹주소를 입력해주세요",
+    });
+    this.okayBtn = page.getByRole("button", { name: "확인", exact: true });
+
+    this.shareBtn = page.getByRole("menuitem", { name: "공유" });
+    this.downloadBtn = page.getByRole("menuitem", { name: "다운로드" });
+    this.editBtn = page.getByRole("menuitem", { name: "이름 변경" });
+    this.deleteBtn = page.getByRole("menuitem", { name: "삭제" });
+
+    this.shareEmailInput = page.getByRole("textbox", {
+      name: "공유할 사용자 이메일 입력",
+    });
+    this.shareSubmitBtn = page.getByRole("button", {
+      name: "공유",
+      exact: true,
+    });
+    this.addEmailBtn = page.getByRole("button").filter({ hasText: /^$/ });
+    this.saveBtn = page.getByRole("button", { name: "저장", exact: true });
+    this.fileNameInput = page.getByRole("textbox", { name: "File name" });
+  }
+
+  private escapeRegExp(value: string) {
+    return value.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&");
+  }
+
+  private async openFileMenu(fileName: string) {
+    const safeName = this.escapeRegExp(fileName);
+    const targetFile = this.page
+      .locator("div")
+      .filter({ hasText: new RegExp(`^${safeName}$`) })
+      .first();
+
+    await targetFile.locator('[id^="radix-"]').first().click();
+  }
+
+  async makeFile(url: string = process.env.YOUTUBE_URL!) {
+    await this.transBtn.click();
+    await this.addressInput.fill(url);
+    await this.okayBtn.click();
+    await this.transSubBtn.click();
+  }
+
+  async shareFile(fileName: string, email: string) {
+    await this.openFileMenu(fileName);
+    await this.shareBtn.click();
+    await this.shareEmailInput.fill(email);
+    await this.addEmailBtn.click();
+    await this.shareSubmitBtn.click();
+    await this.okayBtn.click();
+  }
+
+  async downloadFile(fileName: string) {
+    await this.openFileMenu(fileName);
+    await this.downloadBtn.click();
+  }
+
+  async editFile(oldFileName: string, newFileName: string) {
+    await this.openFileMenu(oldFileName);
+    await this.editBtn.click();
+    await this.fileNameInput.click();
+    await this.fileNameInput.fill(newFileName);
+    await this.saveBtn.click();
+    await this.okayBtn.click();
+  }
+
+  async deleteFile(fileName: string) {
+    await this.openFileMenu(fileName);
+    await this.deleteBtn.click();
+    await this.okayBtn.click();
+    await this.okayBtn.click();
   }
 }
